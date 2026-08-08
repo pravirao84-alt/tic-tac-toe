@@ -1,0 +1,44 @@
+<main class="game-page">
+  <section class="game-card" aria-labelledby="game-title">
+    <header class="game-header">
+      <p class="eyebrow">Two-player classic</p>
+      <h1 id="game-title">Tic-Tac-Toe</h1>
+      <p class="instructions">Take turns to get three marks in a row.</p>
+    </header>
+
+    <div class="scoreboard" aria-label="Players">
+      <span class="player player-x" [class.active]="currentPlayer === 'X' && !winner && !isDraw">Player X</span>
+      <span class="versus">vs</span>
+      <span class="player player-o" [class.active]="currentPlayer === 'O' && !winner && !isDraw">Player O</span>
+    </div>
+
+    <p class="status" [class.winner]="winner" [class.draw]="isDraw" aria-live="polite">
+      {{ statusMessage() }}
+    </p>
+
+    <div class="board" role="grid" aria-label="Tic-Tac-Toe board">
+      @for (cell of cells; track cell) {
+        <button
+          class="cell"
+          [class.x]="board[cell] === 'X'"
+          [class.o]="board[cell] === 'O'"
+          [class.winning]="isWinningCell(cell)"
+          [disabled]="board[cell] !== null || winner !== null || isDraw"
+          [attr.aria-label]="board[cell] ? 'Cell ' + (cell + 1) + ': ' + board[cell] : 'Empty cell ' + (cell + 1)"
+          (click)="makeMove(cell)"
+        >
+          {{ board[cell] }}
+        </button>
+      }
+    </div>
+
+    @if (winner || isDraw) {
+      <p class="result-message">@if (winner) { Great game! } @else { Well played, both of you! }</p>
+    }
+
+    <button class="new-game-button" type="button" (click)="resetGame()">
+      <span aria-hidden="true">↻</span>
+      {{ winner || isDraw ? 'New Game' : 'Restart Game' }}
+    </button>
+  </section>
+</main>
